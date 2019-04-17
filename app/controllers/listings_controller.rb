@@ -1,4 +1,7 @@
 class ListingsController < ApplicationController
+    #before it runs actions we want to call the set_listing method! passes a symbol of the same name!
+    before_action :set_listing, only: [:show, :edit, :update, :destroy]
+    
     def create
         #create new listing
     end
@@ -9,14 +12,15 @@ class ListingsController < ApplicationController
 
     def index
         #shows all listings
+        @listings = Listing.all
     end
 
     def edit
-        #show the edit form 
+        #show the edit form        
     end
 
     def destroy
-        #deletes current listing
+        #deletes current listing       
     end
 
     def new
@@ -24,7 +28,14 @@ class ListingsController < ApplicationController
     end
 
     def show
-        #
+        #view a single listing
     end
     
+    #anything underneath private cannot be used outside! only used in the before action!
+    private
+
+    def set_listing
+        id = params[:id]
+        @listing = Listing.find(id)        
+    end
 end
