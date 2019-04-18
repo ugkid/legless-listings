@@ -1,11 +1,17 @@
 class ListingsController < ApplicationController
     #before it runs actions we want to call the set_listing method! passes a symbol of the same name!
     before_action :set_listing, only: [:show, :edit, :update, :destroy]
-    
+    before_action :set_breeds_and_sexes, only: [:new, :edit]
     def create
         #create new listing
         @listing = Listing.create(listing_params)
-        byebug
+
+        if @listing.errors.any?
+            set_breeds_and_sexes
+            render "new"
+        else
+            redirect_to listings_path
+        end
     end
 
     def update
@@ -38,6 +44,11 @@ class ListingsController < ApplicationController
     
     #anything underneath private cannot be used outside! only used in the before action!
     private
+
+    def set_breeds_and_sexes
+        @breeds = Breed.all
+        @sexes = Listing.sexes.keys
+    end
 
     def set_listing
         id = params[:id]
